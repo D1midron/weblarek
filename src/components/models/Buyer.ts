@@ -1,5 +1,4 @@
-export type TPayment = 'card' | 'cash' | string;
-
+import { TPayment, TOrderErrors } from "../../types";
 export interface IBuyer {
         payment: TPayment;
         email: string;
@@ -17,9 +16,6 @@ export class Buyer {
             save(data: Partial<IBuyer>): void {
                 this.data = { ...this.data, ...data };
              }
-            saveField<K extends keyof IBuyer>(field: K, value: IBuyer[K]): void {
-                this.data[field] = value;
-            } 
             getAll(): IBuyer {
                 return { ...this.data };
             }
@@ -46,23 +42,22 @@ export class Buyer {
                 }
 
                 // Валидация всех полей
-                validateAll(): { valid: boolean; errors: Partial<Record<keyof IBuyer, string>> } {
-                const errors: Partial<Record<keyof IBuyer, string>> = {};
-                 let allValid = true;
+                 validateAll(): { valid: boolean; errors: TOrderErrors } {
+                     const errors: TOrderErrors = {}; // Теперь используем короткое имя типа
+                     let allValid = true;
 
-                (Object.keys(this.data) as (keyof IBuyer)[]).forEach((field) => {
+                    (Object.keys(this.data) as (keyof IBuyer)[]).forEach((field) => {
                     const result = this.validateField(field);
                     if (!result.valid) {
-                    allValid = false;
-                 // записываем сообщение об ошибке для поля
-                    errors[field] = result.error;
-                }
+                        allValid = false;
+                        errors[field] = result.error;
+                    }
                 });
 
-                return {
-                valid: allValid,
-                errors,
-                };
-        }
+                     return {
+                    valid: allValid,
+                     errors,
+                 };
+                 }
 
      }

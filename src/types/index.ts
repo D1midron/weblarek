@@ -18,14 +18,6 @@ export interface IBuyer {
         phone: string;
         address: string;
     }
-export  interface BasketItem {
-        product: IProduct;
-        quantity: number;
-    }
-export interface T {
-        product: IProduct;
-        quantity: number;
-}
 export interface IProductListResponse {
     total: number;
     items: IProduct[];
@@ -38,3 +30,4 @@ export interface IOrderResult {
     id: string;
     total: number;
 }
+export type TOrderErrors = Partial<Record<keyof IBuyer, string>>;

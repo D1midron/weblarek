@@ -1,39 +1,40 @@
 export interface ProductLike {
   id:string;
 }
+import { IProduct } from '../../types'; // Импортируем готовый интерфейс
 
-export class ProductCatalog<T extends ProductLike> {
-  private items: T[] = [];
-  private selectedProduct?: T;
+export class ProductCatalog {
+  private items: IProduct[] = [];
+  private selectedProduct?: IProduct;
 
-  constructor(items?: T[]) {
+  constructor(items?: IProduct[]) {
     if (items?.length) {
       this.items = [...items];
     }
   }
 
   // Устанавливает весь массив продуктов
-  setItems(items: T[] = []): void {
+  setItems(items: IProduct[] = []): void {
     this.items = [...items];
   }
 
   // Возвращает копию массива продуктов
-  getItems(): T[] {
+  getItems(): IProduct[] {
     return [...this.items];
   }
 
   // Поиск продукта по id
-  getProductById(id: string): T | undefined {
+  getProductById(id: string): IProduct | undefined {
     return this.items.find((i) => i.id === id);
   }
 
   // Установка выбранного продукта
-  setSelected(product: T | undefined): void {
+  setSelected(product: IProduct | undefined): void {
     this.selectedProduct = product;
   }
 
   // Получение выбранного продукта
-  getSelected(): T | undefined {
+  getSelected(): IProduct | undefined {
     return this.selectedProduct;
   }
 }

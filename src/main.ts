@@ -3,13 +3,14 @@ import { apiProducts } from './utils/data';
 import { Buyer } from './components/models/Buyer'
 import { ProductBasket } from './components/models/ProductBasket'
 import { ProductCatalog } from './components/models/ProductCatalog';
-import { IProduct } from './types/index';
+import { AppApi } from './components/AppApi';
+import { API_URL, CDN_URL } from './utils/constants';
 
 // --- 1. Проверка ProductCatalog ---
 console.log('--- Проверка ProductCatalog ---');
 
 // Создаем экземпляр (указываем тип данных, так как класс универсальный/generic)
-const catalog = new ProductCatalog<IProduct>();
+const catalog = new ProductCatalog();
 
 // Сохраняем данные из apiProducts.items
 catalog.setItems(apiProducts.items);
@@ -49,7 +50,7 @@ console.log('Количество позиций в корзине (total count)
 console.log('Есть ли в корзине первый товар?:', basket.hasItem(allProducts[0].id));
 
 // Удаление товара
-basket.removeItem(allProducts[0]);
+basket.removeItem(allProducts[0].id);
 console.log('Корзина после удаления первого товара:', basket.getItems());
 
 // --- 3. Проверка Buyer ---
@@ -64,8 +65,8 @@ buyer.save({
 });
 
 // Сохраняем одно поле отдельно
-buyer.saveField('phone', '+7 999 000 11 22');
-buyer.saveField('payment', 'card');
+buyer.save({ phone: '+7 999 000 11 22' });
+buyer.save({ payment: 'card' });
 
 console.log('Данные покупателя:', buyer.getAll());
 
@@ -78,3 +79,25 @@ buyer.clear();
 const validationAfter = buyer.validateAll();
 console.log('Валидация после очистки (должна быть false):', validationAfter.valid);
 console.log('Ошибки валидации:', validationAfter.errors);
+console.log('--- Работа с сервером ---');
+const api = new AppApi(CDN_URL, API_URL);
+api.getProductList()
+    .then((products) => {
+        // Записываем полученные данные в модель каталога
+        catalog.setItems(products);
+
+        // Выводим результат работы метода getItems в консоль
+        console.log('Данные успешно загружены с сервера и сохранены в модель.');
+        console.log('Результат метода getItems():', catalog.getItems());
+
+        // Здесь можно продолжить тесты, если нужно:
+        // например, добавить первый пришедший с сервера товар в корзину
+        if (products.length > 0) {
+            basket.addItem(products[0]);
+            console.log('Товар с сервера добавлен в корзину:', basket.getItems());
+        }
+    })
+    .catch((err) => {
+        // Обязательная обработка ошибок
+        console.error('Ошибка при получении данных от сервера:', err);
+    });
