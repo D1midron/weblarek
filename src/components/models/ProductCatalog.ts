@@ -1,6 +1,4 @@
-export interface ProductLike {
-  id:string;
-}
+
 import { IProduct } from '../../types'; // Импортируем готовый интерфейс
 
 export class ProductCatalog {

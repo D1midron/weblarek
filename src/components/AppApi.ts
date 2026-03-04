@@ -2,10 +2,7 @@ import { Api } from './base/Api'; // Импортируем базу
 import { IProduct, IOrder, IOrderResult } from '../types/index';
 
 
-export interface IProductListResponse {
-    total: number;
-    items: IProduct[];
-}
+import {IProductListResponse} from '../types/index';
 
 export class AppApi extends Api {
     readonly cdn: string;

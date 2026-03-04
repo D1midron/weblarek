@@ -1,10 +1,5 @@
-import { TPayment, TOrderErrors } from "../../types";
-export interface IBuyer {
-        payment: TPayment;
-        email: string;
-        phone: string;
-        address: string;
-    }
+import { TPayment, TOrderErrors, IBuyer } from "../../types";
+
 export class Buyer {
             private data: IBuyer = {
             payment: '',
@@ -27,17 +22,15 @@ export class Buyer {
                 address: '',
                 };
             }
-            private isNonEmpty(value: string): boolean {
-                return typeof value === 'string' && value.trim().length > 0;
-                }
                 validateField(field: keyof IBuyer): { valid: boolean; error?: string } {
                 const value = this.data[field];
-                if (this.isNonEmpty(value)) {
+                if (value && value.trim().length > 0) {
                 return { valid: true };
                 }
+
                 return {
-                valid: false,
-                error: `Поле "${field}" должно быть заполнено и не быть пустым.`,
+                    valid: false,
+                    error: `Поле "${field}" должно быть заполнено.`,
                 };
                 }
 
