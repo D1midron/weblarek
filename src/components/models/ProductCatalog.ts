@@ -1,25 +1,30 @@
 
 import { IProduct } from '../../types'; // Импортируем готовый интерфейс
-
+import { IEvents } from '../base/Events';
 export class ProductCatalog {
-  private items: IProduct[] = [];
-  private selectedProduct?: IProduct;
+    protected items: IProduct[] = [];
+    protected selectedProduct: IProduct | null = null;
 
-  constructor(items?: IProduct[]) {
-    if (items?.length) {
-      this.items = [...items];
+    // Добавляем события в конструктор
+    constructor(protected events: IEvents) {}
+
+    setItems(items: IProduct[]) {
+        this.items = [...items];
+        // Генерируем событие изменения каталога
+        this.events.emit('items:changed', { items: this.items });
     }
-  }
+
+    getItems() {
+        return this.items;
+    }
+
+    setSelected(product: IProduct) {
+        this.selectedProduct = product;
+        // Генерируем событие выбора товара
+        this.events.emit('card:select', product);
+    }
 
   // Устанавливает весь массив продуктов
-  setItems(items: IProduct[] = []): void {
-    this.items = [...items];
-  }
-
-  // Возвращает копию массива продуктов
-  getItems(): IProduct[] {
-    return [...this.items];
-  }
 
   // Поиск продукта по id
   getProductById(id: string): IProduct | undefined {
@@ -27,12 +32,10 @@ export class ProductCatalog {
   }
 
   // Установка выбранного продукта
-  setSelected(product: IProduct | undefined): void {
-    this.selectedProduct = product;
-  }
+ 
 
   // Получение выбранного продукта
-  getSelected(): IProduct | undefined {
-    return this.selectedProduct;
-  }
+    getSelected(): IProduct | null {
+        return this.selectedProduct;
+    }
 }

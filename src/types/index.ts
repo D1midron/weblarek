@@ -31,3 +31,19 @@ export interface IOrderResult {
     total: number;
 }
 export type TOrderErrors = Partial<Record<keyof IBuyer, string>>;
+
+export interface IPage {
+    counter: number;
+    catalog: HTMLElement[];
+    locked: boolean;
+}
+export interface IModalData {
+    content: HTMLElement;
+}
+export interface IFormState {
+    valid: boolean;
+    errors: string;
+}
+export interface ICardBasket {
+    index: number;
+}

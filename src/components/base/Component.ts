@@ -17,6 +17,19 @@ export abstract class Component<T> {
             }
         }
     }
+    // В файле base/Component.ts добавьте этот метод:
+    protected setText(element: HTMLElement, value: unknown) {
+    if (element) {
+        element.textContent = String(value);
+    }
+    }
+
+        protected setDisabled(element: HTMLElement, state: boolean) {
+    if (element) {
+        if (state) element.setAttribute('disabled', 'disabled');
+        else element.removeAttribute('disabled');
+    }
+}
 
     // Вернуть корневой DOM-элемент
     render(data?: Partial<T>): HTMLElement {
@@ -24,3 +37,4 @@ export abstract class Component<T> {
         return this.container;
     }
 }
+

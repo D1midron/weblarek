@@ -1,25 +1,29 @@
 import { IProduct } from "../../types";
-
+import { IEvents } from '../base/Events';
 export class ProductBasket {
-    private items: IProduct[] = [];
+    protected items: IProduct[] = [];
 
+    constructor(protected events: IEvents) {}
+     
     getItems(): IProduct[] {
-        return [...this.items]; 
+        return this.items;
     }
-
-    addItem(product: IProduct): void {
-        
-        if (!this.hasItem(product.id)) {
+    addItem(product: IProduct) {
+        if (!this.items.find(item => item.id === product.id)) {
             this.items.push(product);
+            // Уведомляем об изменении корзины
+            this.events.emit('basket:changed', this.items);
         }
     }
 
-    removeItem(productId: string): void {
-        this.items = this.items.filter(item => item.id !== productId);
+    removeItem(id: string) {
+        this.items = this.items.filter(item => item.id !== id);
+        this.events.emit('basket:changed', this.items);
     }
 
-    clear(): void {
+    clear() {
         this.items = [];
+        this.events.emit('basket:changed', this.items);
     }
 
     getTotal(): number {
