@@ -1,6 +1,6 @@
-import { Component } from '../base/Component';
-import { IEvents } from '../base/Events';
-import { IModalData } from '../../types';
+import { Component } from './base/Component';
+import { IEvents } from './base/Events';
+import { IModalData } from './../types';
 
 
 export class Modal extends Component<IModalData> {
@@ -12,7 +12,6 @@ export class Modal extends Component<IModalData> {
         this._closeButton = container.querySelector('.modal__close') as HTMLButtonElement;
         this._content = container.querySelector('.modal__content') as HTMLElement;
         this._closeButton.addEventListener('click', this.close.bind(this));
-        this.container.addEventListener('click', this.close.bind(this));
         this._content.addEventListener('click', (event) => event.stopPropagation());
     }
 

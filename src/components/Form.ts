@@ -1,6 +1,6 @@
-import { IFormState } from "../../types";
-import { Component } from "../base/Component";
-import { IEvents } from "../base/Events";
+import { IFormState } from "../types";
+import { Component } from "./base/Component";
+import { IEvents } from "./base/Events";
 
 
 export class Form<T> extends Component<IFormState> {
@@ -13,7 +13,7 @@ export class Form<T> extends Component<IFormState> {
         this._submit = container.querySelector('button[type="submit"]') as HTMLButtonElement;
         this._errors = container.querySelector('.form__errors') as HTMLElement;;
 
-        this.container.addEventListener('input', (e: Event) => {
+      this.container.addEventListener('input', (e: Event) => {
             const target = e.target as HTMLInputElement;
             const field = target.name as keyof T;
             const value = target.value;

@@ -1,4 +1,4 @@
-import { Form } from './models/Form';
+import { Form } from './Form';
 import { IEvents } from './base/Events';
 
 // Интерфейс для данных формы заказа

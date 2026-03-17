@@ -29,35 +29,45 @@ export class Buyer {
     }
 
     // Валидация конкретного поля
-    validateField(field: keyof IBuyer): { valid: boolean; error?: string } {
-        const value = this.data[field];
-        // Приводим к строке на случай, если payment имеет тип-юнион
-        if (value && String(value).trim().length > 0) {
-            return { valid: true };
-        }
+  validateField(field: keyof IBuyer): { valid: boolean; error?: string } {
+    const value = this.data[field];
+    
+    // Проверка на пустоту
+    if (!value || String(value).trim().length === 0) {
+        const fieldLabels: Record<keyof IBuyer, string> = {
+            payment: 'способ оплаты',
+            address: 'адрес доставки',
+            email: 'электронную почту',
+            phone: 'номер телефона'
+        };
 
         return {
             valid: false,
-            error: `Поле "${field}" должно быть заполнено.`,
+            // Результат: "Необходимо указать адрес доставки"
+            error: `Необходимо указать ${fieldLabels[field]}`
         };
     }
+
+    return { valid: true };
+}
 
     // Валидация всех полей сразу
-    validateAll(): { valid: boolean; errors: TOrderErrors } {
-        const errors: TOrderErrors = {};
-        let allValid = true;
+  validateAll(): { valid: boolean; errors: TOrderErrors } {
+    const errors: TOrderErrors = {};
+    
+    // Явно перечисляем поля, которые должны быть заполнены
+    const fields: (keyof IBuyer)[] = ['payment', 'address', 'email', 'phone'];
 
-        (Object.keys(this.data) as (keyof IBuyer)[]).forEach((field) => {
-            const result = this.validateField(field);
-            if (!result.valid) {
-                allValid = false;
-                errors[field] = result.error;
-            }
-        });
+    fields.forEach((field) => {
+        const result = this.validateField(field);
+        if (!result.valid) {
+            errors[field] = result.error;
+        }
+    });
 
-        return {
-            valid: allValid,
-            errors,
-        };
-    }
+    return {
+        valid: Object.keys(errors).length === 0,
+        errors,
+    };
+}
 }

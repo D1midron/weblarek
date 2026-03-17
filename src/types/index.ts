@@ -33,7 +33,6 @@ export interface IOrderResult {
 export type TOrderErrors = Partial<Record<keyof IBuyer, string>>;
 
 export interface IPage {
-    counter: number;
     catalog: HTMLElement[];
     locked: boolean;
 }

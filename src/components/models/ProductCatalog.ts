@@ -5,12 +5,12 @@ export class ProductCatalog {
     protected items: IProduct[] = [];
     protected selectedProduct: IProduct | null = null;
 
-    // Добавляем события в конструктор
     constructor(protected events: IEvents) {}
 
+    // 1. Исправлено: setItems должен только сохранять товары и уведомлять об этом
     setItems(items: IProduct[]) {
         this.items = [...items];
-        // Генерируем событие изменения каталога
+        // Уведомляем презентер, что товары загружены, чтобы он их отрисовал
         this.events.emit('items:changed', { items: this.items });
     }
 
@@ -18,23 +18,17 @@ export class ProductCatalog {
         return this.items;
     }
 
+    // 2. Исправлено: убираем emit('card:select'), чтобы не было бесконечного цикла
     setSelected(product: IProduct) {
         this.selectedProduct = product;
-        // Генерируем событие выбора товара
-        this.events.emit('card:select', product);
+        // Событие 'card:select' уже генерируется в классе Card при клике, 
+        // здесь дублировать его не нужно, иначе приложение зависнет.
     }
 
-  // Устанавливает весь массив продуктов
+    getProductById(id: string): IProduct | undefined {
+        return this.items.find((i) => i.id === id);
+    }
 
-  // Поиск продукта по id
-  getProductById(id: string): IProduct | undefined {
-    return this.items.find((i) => i.id === id);
-  }
-
-  // Установка выбранного продукта
- 
-
-  // Получение выбранного продукта
     getSelected(): IProduct | null {
         return this.selectedProduct;
     }
